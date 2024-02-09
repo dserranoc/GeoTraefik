@@ -5,6 +5,8 @@ const app = new Express();
 
 const PORT = process.env.PORT ?? 8000;
 
+const databaseDir = "/data/geotraefik";
+
 const ALLOWED_ASN = (process.env.ALLOWED_ASN ?? "").split(",");
 const ALLOWED_COUNTRIES = (process.env.ALLOWED_COUNTRIES ?? "").split(",");
 const ALLOWED_IPS = (process.env.ALLOWED_IPS ?? "").split(",");
@@ -12,9 +14,11 @@ const ALLOWED_IPS = (process.env.ALLOWED_IPS ?? "").split(",");
 app.get("/filter", async (req, res) => {
   const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
 
-  const asnReader = await Reader.open("./databases/GeoLite2-ASN.mmdb");
-  const countryReader = await Reader.open("./databases/GeoLite2-Country.mmdb");
   try {
+    const asnReader = await Reader.open(`${databaseDir}/GeoLite2-ASN.mmdb`);
+    const countryReader = await Reader.open(
+      `${databaseDir}/GeoLite2-Country.mmdb`
+    );
     const asnResponse = asnReader.asn(ip);
     const countryResponse = countryReader.country(ip);
 
@@ -37,6 +41,12 @@ app.get("/filter", async (req, res) => {
       res.sendStatus(404);
     }
   } catch (err) {
+    if (err.code === "ENOENT") {
+      console.log(
+        `Date: ${new Date().toISOString()}, Error: Server could not find the database file at ${databaseDir}`
+      );
+      return res.status(500).send("Database not found");
+    }
     console.log(
       `Date: ${new Date().toISOString()}, IP: ${ip}, ASN: Unknown, Country: Unknown, Allowed (with error)`
     );
