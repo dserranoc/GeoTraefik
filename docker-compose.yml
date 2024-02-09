@@ -4,9 +4,12 @@ services:
     image: dserranoc/geotraefik
     container_name: geotraefik
     restart: unless-stopped
+    ports:
+      - 8000:8000
     networks:
       - proxy
     environment:
+      - PORT=8000 # Change this if you want to use a different port, don't forget to change it in exposed ports as well.
       - ALLOWED_COUNTRIES=
       - ALLOWED_ASN=
       - ALLOWED_IPS=
