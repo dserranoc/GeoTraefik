@@ -30,4 +30,3 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: dserranoc/geotraefik
-          readme-filepath: /README.md
