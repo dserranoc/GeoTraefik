@@ -1,0 +1,18 @@
+version: '3'
+services:
+  geoip:
+    image: dserranoc/geotraefik
+    container_name: geotraefik
+    restart: unless-stopped
+    networks:
+      - proxy
+    environment:
+      - ALLOWED_COUNTRIES=
+      - ALLOWED_ASN=
+      - ALLOWED_IPS=
+    volumes:
+      - ./databases:/home/node/app/databases:ro
+
+networks:
+  proxy: # <--- name of the network used by Traefik
+    external: true
