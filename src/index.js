@@ -33,8 +33,8 @@ app.get("/filter", async (req, res) => {
         ASNS.includes(autonomousSystemNumber.toString()) ||
         IPS.includes(ip),
       block: !(
-        COUNTRIES.includes(isoCode) &&
-        ASNS.includes(autonomousSystemNumber.toString()) &&
+        COUNTRIES.includes(isoCode) ||
+        ASNS.includes(autonomousSystemNumber.toString()) ||
         IPS.includes(ip)
       ),
     };
