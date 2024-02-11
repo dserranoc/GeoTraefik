@@ -33,7 +33,9 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: dserranoc/geotraefik:latest
+          tags: |
+            dserranoc/geotraefik:latest
+            ghcr.io/dserranoc/geotraefik:latest
       - name: Update repo description
         uses: peter-evans/dockerhub-description@v4
         with:
